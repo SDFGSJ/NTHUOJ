@@ -1,5 +1,5 @@
 #include<stdio.h>
-char a[50][50];//記錄地圖 
+char a[50][50];		//記錄地圖 
 int len_row[50]={0};//記錄每row的數字個數 
 int len_col[50]={0};//記錄每col的數字個數
 int row[50][50]={0};//記錄row的'o'分布狀況 
@@ -37,13 +37,13 @@ int main(void)
 		int valid=1;
 		for(i=0;i<n;i++){	//row
 			int index=0,count=0;
-			for(j=0;j<=m;j++){	//j要讓它多跑一圈 
-				if(j!=m && a[i][j]=='o'){
+			for(j=0;j<=m;j++){	//j要讓它多跑一圈，因為如果最後一個是'o'，還需要再跑一次，檢查它有沒有符合分布狀況 
+				if(j!=m && a[i][j]=='o'){	//只要j還沒到最後而且a[i][j]=='o' 
 					count++;
 				}else if(count>0){	//j==m 或 a[i][j]=='x'就跑else if這邊，如果現在'o'個數>0 
-					if(index>=len_row[i]){
+					if(index>=len_row[i]){	//如果算到太多組'o'，index就會超過該row的數字個數 --> 無效
 						valid=0;
-					}else if(count!=row[i][index]){		//如果目前'o'個數跟分布狀況不一樣-->無效 
+					}else if(count!=row[i][index]){		//如果目前'o'個數跟分布狀況不一樣 --> 無效 
 						valid=0;
 					}
 					index++;
@@ -55,7 +55,7 @@ int main(void)
 		
 		for(i=0;i<m;i++){	//col	//注意i從0到m-1 
 			int index=0,count=0;
-			for(j=0;j<=n;j++){	//注意j從0到n，要多跑一圈 
+			for(j=0;j<=n;j++){	//注意j從0到n，j要多跑一圈，因為如果最後一個是'o'，還需要再跑一次，檢查它有沒有符合分布狀況
 				if(j!=n && a[j][i]=='o'){	//注意是a[j][i]不是a[i][j] 
 					count++;
 				}else if(count>0){	//j==n 或 a[j][i]=='x'就跑else if這邊，如果現在'o'個數>0

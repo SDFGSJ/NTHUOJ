@@ -1,69 +1,64 @@
-#include <stdio.h>
+#include<stdio.h>
 char board[12][12];
 
-int init_board(int size);
-int check_queen(int r, int c, int size);
-int check_rooks(int r, int c, int size);
-int put_chess(int r, int n, int m, int N, int M, int size);
+int check_queen(int row,int col,int size);
+int check_rooks(int row,int col,int size);
+int put_chess(int row,int q,int r,int size);
 
-int main(){
-    int N, M;
-    while(scanf("%d%d", &N, &M) != EOF){
-        init_board(N+M);
-        printf("%d\n", put_chess(0, 0, 0, N, M, N+M));
+int N,M;
+int main(void){
+    while(~scanf("%d%d",&N,&M)){
+        printf("%d\n",put_chess(0,0,0,N+M));
     }
-
     return 0;
 }
-
-
-int init_board(int size){
-    for(int i=0; i<size; i++)
-        for(int j=0; j<size; j++)
-            board[i][j] = '0';
-}
-
-int check_queen(int r, int c, int size){
-    for(int i=1; i<=r; i++){
-        // check_diagonal
-        if(c-i >= 0 && (board[r-i][c-i] == 'Q' || board[r-i][c-i] == 'R'))
+int check_queen(int row,int col,int size){
+	int i;
+    for(i=1;i<=row;i++){
+        //檢查對角線 
+        if(0<=col-i && (board[row-i][col-i]=='Q' || board[row-i][col-i]=='R'))
             return 0;
-        if(c+i < size && (board[r-i][c+i] == 'Q' || board[r-i][c+i] == 'R'))
+        if(col+i<size && (board[row-i][col+i]=='Q' || board[row-i][col+i]=='R'))
             return 0;
-        if(board[r-i][c] == 'Q' || board[r-i][c] == 'R')
+        //檢查直行 
+        if(board[row-i][col]=='Q' || board[row-i][col]=='R')
             return 0;
     }
     return 1;
 }
-
-int check_rooks(int r, int c, int size){
-    for(int i=1; i<=r; i++){
-        if(c-i >= 0 && board[r-i][c-i] == 'Q')
+int check_rooks(int row,int col,int size){
+	//不用檢查斜對角上的rook 
+	int i;
+    for(i=1;i<=row;i++){
+    	//檢查對角線 
+        if(col-i>=0 && board[row-i][col-i]=='Q')
             return 0;
-        if(c+i < size && board[r-i][c+i] == 'Q')
+        if(col+i<size && board[row-i][col+i]=='Q')
             return 0;
-        if(board[r-i][c] == 'Q' || board[r-i][c] == 'R')
+        //檢查直行 
+        if(board[row-i][col]=='Q' || board[row-i][col]=='R')
             return 0;
     }
     return 1;
 }
-
-
-int put_chess(int r, int n, int m, int N, int M, int size){
-    if(r == size){
+int put_chess(int row,int q,int r,int size){
+    int i;
+    //base case
+	if(row==size){
         return 1;
     }
-    int cnt = 0;
-    for(int c=0; c<size; c++){
-        if(n<N && check_queen(r, c, size)){
-            board[r][c] = 'Q';
-            cnt += put_chess(r+1, n+1, m, N, M, size);
-            board[r][c] = '0';
+    
+    int cnt=0;
+    for(i=0;i<size;i++){
+        if(q<N && check_queen(row,i,size)){	//放queen 
+            board[row][i]='Q';
+            cnt += put_chess(row+1,q+1,r,size);
+            board[row][i]='0';	//要重設狀態 
         }
-        if(m<M && check_rooks(r, c, size)){
-            board[r][c] = 'R';
-            cnt += put_chess(r+1, n, m+1, N, M, size);
-            board[r][c] = '0';
+        if(r<M && check_rooks(row,i,size)){	//放rook 
+            board[row][i]='R';
+            cnt += put_chess(row+1,q,r+1,size);
+            board[row][i]='0';	//要重設狀態 
         }
     }
     return cnt;
