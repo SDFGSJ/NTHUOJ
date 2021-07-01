@@ -9,10 +9,8 @@ int main(void)
 	*/
 	int size,count=1,m=0,n=0,i,j;
 	scanf("%d",&size);
-	int map[2*size][2*size];
-	for(i=0;i<2*size;i++)
-		for(j=0;j<2*size;j++)
-			map[i][j]=0;
+	int map[2*size][2*size]={0};
+	
 	//size有多大，外層迴圈就要跑size次 
 	for(i=1;i<size+1;i++)
 	{
@@ -49,13 +47,16 @@ int main(void)
 	}
 		
 	/*印出來*/
-	for(i=0;i<2*size;i++)
-		for(j=0;j<2*size;j++)
-		{
-			if(j==2*size-1)
-				printf("%d\n",map[i][j]);
-			else
-				printf("%d ",map[i][j]);
-		}			
+	for(i=0;i<2*size-1;i++){
+		for(j=0;j<2*size;j++){
+			printf("%d ",map[i][j]);
+		}
+		printf("\n");
+	}
+	for(i=0;i<2*size-1;i++)
+	{
+		printf("%d ",map[2*size-1][i]);
+	}
+	printf("%d",map[2*size-1][2*size-1]);		
 	return 0;
 }
